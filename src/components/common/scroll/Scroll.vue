@@ -38,11 +38,12 @@ export default {
       probeType: this.probeType,
       pullUpLoad: this.pullUpLoad
     });
+
     //2.监听位置
     if (this.probeType === 2 || this.probeType === 3) {
-      this.scroll.on("scroll", postion => {
+      this.scroll.on("scroll", position => {
         // console.log(postion);
-        this.$emit("scroll", postion);
+        this.$emit("scroll", position);
       });
     }
 
