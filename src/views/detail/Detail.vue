@@ -10,8 +10,9 @@
       <detail-comment-info ref="comment" :comment-info="commentInfo" />
       <goods-list ref="recommend" :goods="recommends" />
     </scroll>
-    <detail-bottom-bar />
+    <detail-bottom-bar @addToCart="addToCart" />
     <back-top @click.native="backClick" v-show="isShowBackTop" />
+    <!-- <toast :message="message" :show="show" /> -->
   </div>
 </template>
 
@@ -26,9 +27,13 @@ import DetailCommentInfo from "./childComps/DetailCommentInfo";
 import DetailBottomBar from "./childComps/DetailBottomBar";
 
 import Scroll from "components/common/scroll/Scroll";
+// import Toast from "components/common/toast/Toast";
+
 import GoodsList from "components/content/goods/GoodsList";
+
 import { itemListenerMixin, backTopMixin } from "common/mixin";
 import { debouce } from "common/utils";
+import { mapActions, mapGetters } from "vuex";
 import {
   getDetail,
   Goods,
@@ -49,7 +54,8 @@ export default {
     DetailCommentInfo,
     DetailBottomBar,
     GoodsList,
-    Scroll
+    Scroll,
+    // Toast
   },
   data() {
     return {
@@ -62,7 +68,9 @@ export default {
       commentInfo: {},
       recommends: [],
       themeTopYs: [],
-      getThemeTopY: null
+      getThemeTopY: null,
+      // message: "我人都傻了",
+      // show: false
       // currentIndex: 0
     };
   },
@@ -120,6 +128,24 @@ export default {
     this.$bus.$off("itemImage", this.itemImgListenner);
   },
   methods: {
+    ...mapActions(["addCart"]),
+    addToCart() {
+      //1.获取购物车展示数据
+      let product = {};
+      product.image = this.topImages[0];
+      product.title = this.goods.title;
+      product.desc = this.goods.desc;
+      product.price = this.goods.realPrice;
+      product.iid = this.iid;
+
+      //2.将商品添加到购物车
+      // this.$store.commit('addCart',product)
+      // this.$store.dispatch("addCart", product).then(res => console.log(res));
+      this.addCart(product).then(res => {
+        // console.log(this.$toast)
+        this.$toast.show(res,700)
+      });
+    },
     imageLoad() {
       this.getThemeTopY();
       this.refresh();

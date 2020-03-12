@@ -44,6 +44,7 @@ import GoodsList from "components/content/goods/GoodsList";
 import { getHomeMultidata, getHomeGoods } from "network/home";
 
 import { itemListenerMixin,backTopMixin } from "common/mixin";
+import { POP, SELL, NEW } from "common/const";
 
 export default {
   name: "Home",
@@ -86,7 +87,6 @@ export default {
   deactivated() {
     //1.保存Y值
     this.saveY = this.$refs.scroll.getScrollY();
-    console.log(this.saveY);
     //2.取消全局事件的监听
     this.$bus.$off("itemImage", this.itemImgListenner);
   },
